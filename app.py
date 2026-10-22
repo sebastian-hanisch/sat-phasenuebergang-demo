@@ -1,7 +1,7 @@
 """SAT in der Praxis: DPLL und Phasenübergang - interaktive Konzept-Demo
 Sebastian Hanisch - Operations Research und Machine Learning
 
-Viertes Stück der Komplexitätsklassen-Reihe: warum 3-SAT trotz NP-Vollständigkeit oft leicht ist und wo die schweren Formeln liegen. Aufwand in Knoten der DPLL-Suche.
+Viertes Stück der Komplexitätsklassen-Reihe: wie schwer Zufallsformeln von 3-SAT trotz NP-Vollständigkeit für eine einfache Suche sind (kleines n) und wo sie am teuersten werden. Aufwand in Knoten der DPLL-Suche.
 Aufbau und Regeln stehen im DEMO-PLAYBOOK.md (§2).
 
 Lauffähig mit: streamlit run app.py
@@ -180,7 +180,7 @@ if st.button("📄 PDF erstellen"):
 if st.session_state.get("pdf_for") == settings:
     st.download_button("⬇️ PDF herunterladen", data=_pdf(settings), file_name="sat-in-der-praxis.pdf", mime="application/pdf")
 
-st.markdown("## ❓ Kernfrage: Warum ist eine NP-vollständige Frage so oft schnell entschieden?")
+st.markdown("## ❓ Kernfrage: Warum sind diese NP-vollständigen Zufallsformeln so oft schnell entschieden?")
 st.markdown(
     "Weil „NP-vollständig“ den **schlimmsten Fall** meint. Die Experimente zeigen, wo die Suche wirklich teuer wird (am Phasenübergang), was dagegen hilft (Einheitspropagation, gute Regeln) "
     "und dass strukturell harte Formeln etwas anderes sind als Zufallsformeln."
@@ -252,7 +252,7 @@ st.subheader("🔬 Experiment: Warum der schlimmste Fall nicht die Praxis ist")
 st.caption(
     "Drei Familien: die **Schubfach-Formel** (h + 1 Tauben passen nicht in h Fächer: unerfüllbar, strukturell hart für diese Suche), eine **Zufallsformel** mittlerer Größe und die "
     "Schubfach-Formel mit **Störung** (jedes Vorzeichen mit der gewählten Wahrscheinlichkeit umgedreht, 10 feste Störungen je Wert). **Achtung:** Die Störung ändert die Formel und oft ihre Antwort. "
-    "Sie ist keine Glättung desselben Problems; bei Simplex (Klee-Minty-Demo der Lineare-Programmierung-Reihe) ändert die Störung den Optimalwert kaum, hier kippt sie die Erfüllbarkeit."
+    "Sie ist keine Glättung desselben Problems; bei Simplex (Klee-Minty-Demo der Lineare-Programmierung-Reihe) ändert die Störung die Pivotzahl, hier kippt sie die Erfüllbarkeit."
 )
 srows = _structure(settings.h)
 reference = _reference()
@@ -282,7 +282,7 @@ st.markdown(
 | **Endliches n** | Der 50-%-Schnitt liegt bei diesen Größen über der Vorhersage 4,27 der Literatur für sehr große n. Diese Zahl ist für k = 3 nur eine Vorhersage, bewiesen ist die Schwelle nur für große k. | – |
 | **Knoten sind keine Laufzeit** | Ein Knoten kostet je nach Formelgröße verschieden viel; die Zählung vergleicht Suchbäume, nicht Rechner. | – |
 | **Ein einfaches DPLL steht für „den Löser“** | Moderne SAT-Löser lernen aus Widersprüchen (Klausellernen) und lösen Industrieformeln mit Millionen Variablen. Die Demo baut das nicht. Auch ein Löser mit Klausellernen braucht auf Zufallsformeln am Übergang mit n mehr Konflikte (Scratch-Probe mit OR-Tools CP-SAT, nicht Teil dieser Demo, keine Zahl). | – |
-| **Die Störung glättet das Problem** | Das Umdrehen von Vorzeichen ändert die Formel und oft ihre Antwort: es ist ein Wechsel in eine leichte Familie, keine Glättung im Sinn der geglätteten Analyse. | `klee-minty-demo` (dort bleibt der Optimalwert fast gleich) |
+| **Die Störung glättet das Problem** | Das Umdrehen von Vorzeichen ändert die Formel und oft ihre Antwort: es ist ein Wechsel in eine leichte Familie, keine Glättung im Sinn der geglätteten Analyse. | `klee-minty-demo` (dort ändert die Störung die Pivotzahl) |
 | **Aufwand wächst exponentiell** | Der Trend über sechs Größen passt dazu, ist aber kein Beweis. | – |
 """
 )

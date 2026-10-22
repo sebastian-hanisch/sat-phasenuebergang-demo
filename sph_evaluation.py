@@ -218,7 +218,7 @@ def verdict_phase(by_n: dict[int, list[dict]]) -> tuple[str, str]:
     return "info", (
         f"Bei m/n = {fmt_num(r0)} sind {pct_range(first_shares)} der Formeln erfüllbar, bei m/n = {fmt_num(r1)} nur {pct_range(last_shares)}. "
         f"Der 50-%-Schnitt liegt bei n = {' / '.join(str(n) for n in sizes)} bei m/n = {cut_text}; die Vorhersage der Literatur für sehr große n ist {fmt_num(C.THRESHOLD_PREDICTION, 2)} "
-        f"(für k = 3 nicht bewiesen). Am teuersten ist die Suche bei n = {sizes[-1]} bei m/n = {fmt_num(pk['ratio'], 2)} (Median {fmt_median(pk['median'])} Knoten)."
+        f"(für k = 3 nicht bewiesen). Am teuersten ist die Suche bei n = {sizes[-1]} bei m/n = {fmt_num(pk['ratio'], 2)} (Median {fmt_median(pk['median'])} Knoten); die Spitze ist flach und verschiebt sich mit der Formelmenge."
     )
 
 
@@ -229,7 +229,7 @@ def verdict_growth(rows: list[dict]) -> tuple[str, str]:
     return "info", (
         f"Beim Verhältnis {fmt_num(C.GROWTH_RATIO)} braucht die Suche im Median {fmt_median(a['median'])} Knoten bei n = {a['n']} und {fmt_median(b['median'])} bei n = {b['n']}: "
         f"das {fmt_int(round(b['median'] / a['median']))}-Fache, im Mittel ×{fmt_num(factor)} je zehn zusätzliche Variablen. Das passt zu einem exponentiellen Trend "
-        f"(über {len(rows)} Größen gemessen, kein Beweis)."
+        f"(über {len(rows)} Größen gemessen, kein Beweis); die Faktoren schwanken mit der Formelmenge um etwa ein Viertel."
     )
 
 
@@ -244,7 +244,8 @@ def verdict_levers(rows: list[dict]) -> tuple[str, str]:
     return "info", (
         f"Ohne Einheitspropagation braucht die Regel „erste Variable“ im Median {fmt_median(off_first['median'])} statt {fmt_median(on_first['median'])} Knoten: "
         f"Faktor {fmt_int(round(factor_units))}{lower}, {off_first['aborted']} von {off_first['count']} Läufen am Budget abgebrochen. "
-        f"Die Verzweigungsregel wirkt schwächer: mit Einheitspropagation sinkt der Median von „erste Variable“ auf Jeroslow–Wang von {fmt_median(on_first['median'])} auf {fmt_median(on_jw['median'])} Knoten (Faktor {fmt_num(factor_rule)})."
+        f"Die Verzweigungsregel wirkt mit Einheitspropagation schwächer: der Median sinkt von „erste Variable“ auf Jeroslow–Wang von {fmt_median(on_first['median'])} auf {fmt_median(on_jw['median'])} Knoten (Faktor {fmt_num(factor_rule)}). "
+        "Die Faktoren sind Größenordnungen: mit anderen Formelmengen weichen einzelne Mediane bis etwa um den Faktor 2 ab."
     )
 
 
@@ -253,8 +254,15 @@ def verdict_structure(row: dict, base_nodes: int, h: int, reference: dict) -> tu
     if row["pm"] == 0:
         return "info", (f"Die ungestörte Schubfach-Formel mit {h} Fächern ({h + 1} Tauben) ist **unerfüllbar** und braucht {fmt_int(base_nodes)} Knoten; eine Zufallsformel mittlerer Größe "
                         f"(n = {reference['n']}, m = {reference['m']}) braucht im Median {fmt_median(reference['median'])} Knoten. Strukturell harte Formeln sind schwerer als typische Zufallsformeln gleicher Größenordnung.")
+    ease = "macht die Formel also leicht" if row["median"] * 2 <= base_nodes else "macht die Formel hier noch kaum leichter"
+    if row["sat"] == row["count"]:
+        answer = ", **ändert dabei aber ihre Antwort**"
+    elif row["sat"] == 0:
+        answer = " (alle bleiben unerfüllbar, aber zufallsähnlich)"
+    else:
+        answer = ", **ändert dabei aber oft ihre Antwort**"
     return "info", (
         f"Bei {fmt_pm(row['pm'])} umgedrehten Vorzeichen braucht die Suche im Median {fmt_median(row['median'])} statt {fmt_int(base_nodes)} Knoten, "
-        f"{row['sat']} von {row['count']} Störungen sind **erfüllbar**. Die Störung macht die Formel also leicht, **ändert dabei aber oft ihre Antwort**: sie ist keine Glättung "
+        f"{row['sat']} von {row['count']} Störungen sind **erfüllbar**. Die Störung {ease}{answer}: sie ist keine Glättung "
         "desselben Problems, sondern ein Wechsel in eine andere Instanzfamilie."
     )

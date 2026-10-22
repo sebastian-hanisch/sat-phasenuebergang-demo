@@ -79,5 +79,8 @@ def test_structure_verdict_unperturbed_and_perturbed():
     assert kind == "info" and "mit 5 Fächern (6 Tauben)" in text and "**unerfüllbar** und braucht 239 Knoten" in text and "n = 30, m = 150" in text and "im Median 26 Knoten" in text
     kind, text = ev.verdict_structure({"pm": 10, "median": 17.0, "count": 10, "sat": 10}, 239, 5, ref)
     assert "Bei 1 % umgedrehten Vorzeichen" in text and "im Median 17 statt 239 Knoten" in text and "10 von 10 Störungen sind **erfüllbar**" in text
-    assert "ändert dabei aber oft ihre Antwort" in text and "keine Glättung" in text
-    assert "Bei 0,5 %" in ev.verdict_structure({"pm": 5, "median": 200.0, "count": 10, "sat": 5}, 239, 5, ref)[1]
+    assert "macht die Formel also leicht" in text and "ändert dabei aber ihre Antwort" in text and "keine Glättung" in text
+    text = ev.verdict_structure({"pm": 5, "median": 200.0, "count": 10, "sat": 5}, 239, 5, ref)[1]
+    assert "Bei 0,5 %" in text and "noch kaum leichter" in text and "ändert dabei aber oft ihre Antwort" in text
+    text = ev.verdict_structure({"pm": 500, "median": 3.0, "count": 10, "sat": 0}, 239, 5, ref)[1]
+    assert "macht die Formel also leicht" in text and "alle bleiben unerfüllbar" in text and "ändert dabei" not in text

@@ -56,7 +56,7 @@ PRESET_HELP = {
     "Lehrbeispiel (6 Variablen)": "6 Variablen, 14 Klauseln: ein kleiner Suchbaum, den man Knoten für Knoten lesen kann.",
     "Locker (m/n = 3)": "Wenige Regeln je Entscheidung: fast immer erfüllbar, die Suche braucht wenig.",
     "Am Übergang (m/n = 4,5)": "40 Variablen, 180 Klauseln: erfüllbar oder nicht, beides ist möglich, die Suche ist hier am teuersten.",
-    "Überbestimmt (m/n = 6)": "Sehr viele Regeln: fast immer unerfüllbar, aber ein Widerspruch zeigt sich früh.",
-    "Ohne Einheitspropagation": "Dieselbe Formel ohne den größten Hebel und mit der einfachsten Verzweigungsregel: das Knotenbudget kann erreicht werden.",
+    "Überbestimmt (m/n = 6)": "Sehr viele Regeln: fast immer unerfüllbar, und ein Widerspruch zeigt sich früher als am Übergang.",
+    "Ohne Einheitspropagation": "Dieselbe Formel ohne den im Mittel größten Hebel und mit der einfachsten Verzweigungsregel: das Knotenbudget kann erreicht werden.",
     "Schubfach, leicht gestört": "6 Fächer, 7 Tauben, 1 % der Vorzeichen umgedreht: die Formel ändert dadurch meist ihre Antwort und wird leicht.",
 }
